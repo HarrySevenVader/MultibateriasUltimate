@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Consultas - Multi Baterías ⚡</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='images/place.jpg') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #1c3a9c;
+            color: white;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        a:hover {
+            background-color: #45a049; /* Verde más oscuro en hover */
+        }
+
+        main {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h2, h3 {
+            margin-top: 40px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #e1f0dc;
+        }
+
+        table th, table td {
+            border: 1px solid #bdbdbd;
+            padding: 10px;
+        }
+
+        table th {
+            background-color: #9be68f;
+            font-weight: bold;
+        }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal.active {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .modal p {
+            margin: 10px 0;
+        }
+
+        .modal input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .modal button {
+            background-color: #4CAF50; /* Verde para el botón enviar */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal button:hover {
+            background-color: #45a049;
+        }
+
+        .modal .close-btn {
+            background-color: #333; /* Botón de cierre con color oscuro */
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            cursor: pointer;
+            color: white;
+            border-radius: 50%;
+        }
+
+        /* Fondo opaco */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none; /* Ocultado por defecto */
+        }
+
+        .overlay.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Bienvenido, {{ username }} ⚡</h1>
+    <nav>
+        <a href="{{ url_for('index_admin') }}">Inicio</a>
+        <a href="{{ url_for('historial') }}">Historial</a>
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Panel de Consultas</h2>
+    <br>
+    <p>Hola <strong>Administrador</strong>⚡. Aquí tienes los registros de consultas actuales para que puedas gestionarlos fácilmente.</p>
+
+    <h3>Registros de Usuario</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Genero</th>
+                <th>Asunto</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contacto in contactos %}
+            <tr onclick="openModal('{{ contacto.id_contacto }}', '{{ contacto.nombre_contacto }}', '{{ contacto.correo_contacto }}', '{{ contacto.asunto }}')">
+                <td>{{ contacto.id_contacto }}</td>
+                <td>{{ contacto.nombre_contacto }}</td>
+                <td>{{ contacto.correo_contacto }}</td>
+                <td>{{ contacto.sexo }}</td>
+                <td>{{ contacto.asunto }}</td>
+                <td>{{ contacto.fecha_contacto }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</main>
+
+<!-- Fondo opaco -->
+<div class="overlay" id="overlay"></div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+    <span class="close-btn" onclick="closeModal()">X</span>
+    <h2>Detalles del Usuario</h2>
+    <p><strong>ID:</strong> <span id="modal-id"></span></p>
+    <p><strong>Nombre:</strong> <span id="modal-nombre"></span></p>
+    <p><strong>Correo:</strong> <span id="modal-correo"></span></p>
+    <p><strong>Consulta:</strong> <span id="modal-asunto"></span></p>
+
+    <h3>Responder al Usuario</h3>
+    <form action="{{ url_for('responder_contacto') }}" method="POST">
+        <input type="hidden" name="id_contacto" id="modal-form-id">
+        <input type="hidden" name="correo_contacto" id="modal-form-correo">
+        <input type="text" name="respuesta" placeholder="Escribe tu respuesta" required>
+        <button type="submit">Enviar Respuesta</button>
+    </form>
+</div>
+
+<script>
+    function openModal(id, nombre, correo, asunto) {
+        document.getElementById("modal-id").textContent = id;
+        document.getElementById("modal-nombre").textContent = nombre;
+        document.getElementById("modal-correo").textContent = correo;
+        document.getElementById("modal-asunto").textContent = asunto;
+
+        document.getElementById("modal-form-id").value = id;
+        document.getElementById("modal-form-correo").value = correo;
+
+        document.getElementById("modal").classList.add("active");
+        document.getElementById("overlay").classList.add("active");
+    }
+
+    function closeModal() {
+        document.getElementById("modal").classList.remove("active");
+        document.getElementById("overlay").classList.remove("active");
+    }
+</script>
+
+</body>
+</html>

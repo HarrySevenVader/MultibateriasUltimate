@@ -1,0 +1,209 @@
+<!-- LADO DEL CLIENTE - FRONT END -->
+<!-- Programador : Harry, Ingeniero en Informatica, Universidad Tecnologica Metropolitana -->
+
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Baterías - Administracion⚡</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_confirmation.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_admin_page.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+</head>
+<body class="roboto">
+
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            
+            <h1>Multi Baterías⚡</h1>
+            
+            <nav>
+                <nav>
+                    <ul>
+                        <li><a href="{{ url_for('ver_usuarios') }}">Ver usuarios</a></li>
+                        <li><a href="{{ url_for('admin_dashboard') }}">Acceder a las Consultas</a></li>
+                        <li><a href="{{ url_for('logout') }}">Cerrar Sesion</a></li>
+                    </ul>
+                </nav>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Sección de Inicio
+        Debido a que el contenido se quiere eliminar en favor de dar la imagen del negocio, se ha decidido eliminar el contenido de la sección de inicio y dejar solo el título y el botón de acción. 
+        Esta accion se concretara comentando este codigo.
+    -->
+    <section id="home" class="hero">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <!--<a href="#products" class="btn">Ver Productos</a>-->
+    </section>
+
+    <!-- Sección de Nosotros -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2>Sobre Nosotros</h2>
+            <br>
+            <p>En <strong>Multibaterías⚡</strong>, somos tu tienda de confianza en Maipú para todas tus necesidades de baterías. Con más de 6 años de experiencia, nos hemos consolidado como los líderes en el suministro de baterías automotrices de alta calidad, aceites, aditivos químicos, refrigerantes y anticongelantes. Nuestra dedicación y compromiso nos han permitido despachar nuestros productos a lo largo de todo Chile, garantizando un servicio ágil y confiable.</p>
+            <br>
+                
+            <p>Ubicados en <strong>Tucán 601, esquina longitudinal, Maipú, Santiago, Chile</strong>, ofrecemos un servicio integral que incluye entrega a domicilio dentro de Santiago para asegurar que tengas lo que necesitas, cuando lo necesitas. Además, nuestro equipo de especialistas está siempre disponible para asesorarte y ayudarte a encontrar la solución perfecta para tu vehículo.</p>
+            <br>
+
+            <p>En Multibaterías⚡, nuestra misión es brindarte no solo productos de calidad, sino también un servicio excepcional que haga de cada visita una experiencia satisfactoria. <strong>Tu vehículo merece lo mejor, y nosotros estamos aquí para asegurarnos de que lo obtenga.</strong></p>
+            <br>
+
+        </div>
+    </section>
+
+        <!-- Nueva Sección de Marcas -->
+        <section id="brands" class="brands">
+            <div class="container">
+                <h2>Marcas Trabajadas</h2>
+                <div class="brand-list">
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/ACD.png') }}" alt="Marca 1">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/Bosch.png') }}" alt="Marca 2">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/ROCKET.png') }}" alt="Marca 3">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/solite.png') }}" alt="Marca 4">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/starter.png') }}" alt="Marca 5">
+                    </div>
+                    <div class="brand-item">
+                        <img src="{{ url_for('static', filename='images/voltex.jpg') }}" alt="Marca 6">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    <!-- Sección de Productos -->
+    <section id="products" class="products">
+        <div class="container">
+            <h2>Productos y Servicios</h2>
+            <div class="product-list">
+                <div class="product-item">
+                    <img src="{{ url_for('static', filename='images/productos/productos.jpg') }}" alt="Batería 1">
+                    <h3>Amplia Variedad de Baterías</h3>
+                    <p>Baterías de auto, motos y camiones con tecnologías SMF, AGM y EFB con sistemas STARTSTOP.</p>
+                </div>
+                <div class="product-item">
+                    <img src="{{ url_for('static', filename='images/productos/producto1.jpg') }}" alt="Batería 2">
+                    <h3>Batería Potente y Duradera</h3>
+                    <p>Rendimiento superior y larga vida útil para garantizar tu tranquilidad.</p>
+                </div>
+                <div class="product-item">
+                    <img src="{{ url_for('static', filename='images/productos/servicio1.jpg') }}" alt="Servicio">
+                    <h3>Servicio Dedicado</h3>
+                    <p>Instalación de baterías, chequeo del sistema de carga y chequeo de vida útil de baterías. Contáctanos por WhatsApp para más detalles.</p>
+                </div>
+                <!-- Agregar mas productos segun sea necesario -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Contacto -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contacto</h2>
+            <p>Puedes contactarnos para cualquier consulta o pedido.</p>
+            <a href="mailto:multibateriasmaipu@gmail.com">multibateriasmaipu@gmail.com</a>
+            <div class="contact-card">
+                <img src="{{ url_for('static', filename='images/targeta/nota_v2.1.jpg') }}" alt="Contacto">
+            </div>
+            <br>
+        </div>
+    </section>
+
+<!-- Botón Sticky de WhatsApp -->
+<a href="https://wa.me/56974170208" class="whatsapp-button">
+    <img src="{{ url_for('static', filename='images/logos/whatsapp_logo_icon_186881.webp') }}" alt="WhatsApp">
+</a>
+
+    <!-- Botón Sticky para mostrar horario de atención -->
+<a href="javascript:void(0);" class="hours-button" onclick="toggleModal()" style="position: fixed; bottom: 110px; right: 20px; z-index: 1000;">
+    <img src="{{ url_for('static', filename='images/logos/iconhorario.png') }}" alt="Horario" style="width: 80px; height: 80px;">
+</a>
+
+<!-- Modal para el horario de atención -->
+<div id="hoursModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); justify-content: center; align-items: center; z-index: 1000;">
+    <div style="background-color: #fff; width: 80%; max-width: 400px; padding: 20px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); text-align: center; position: relative;">
+        <!-- Botón para cerrar -->
+        <button onclick="toggleModal()" style="position: absolute; top: 10px; right: 10px; background-color: transparent; border: none; font-size: 24px; cursor: pointer; color: #333;">&times;</button>
+        
+        <!-- Contenido del modal -->
+        <h2 style="margin-bottom: 15px; font-size: 22px; color: #333;">Horario de Atención</h2>
+        <p style="font-size: 18px; color: #555;">Lunes a Sábado: <strong>9:00 AM - 3:00 PM</strong></p>
+        <p style="font-size: 18px; color: #555;">Domingo: <strong>Cerrado</strong></p>
+    </div>
+</div>
+
+<!-- JavaScript para mostrar/ocultar el modal -->
+<script>
+    function toggleModal() {
+        var modal = document.getElementById('hoursModal');
+        if (modal.style.display === "flex") {
+            modal.style.display = "none";
+        } else {
+            modal.style.display = "flex";
+            modal.style.justifyContent = "center";
+            modal.style.alignItems = "center";
+        }
+    }
+</script>
+
+  <!-- Pie de página -->
+<footer>
+    <div class="container">
+        <div class="footer-section">
+            <h4>Dirección</h4>
+            <p>Tucán 601, Esq, longitudinal Maipu, Santiago de Chile</p>
+        </div>
+        <div class="footer-section">
+            <h4>Redes Sociales</h4>
+            <ul class="social-media">
+                <li><a href="https://www.facebook.com/profile.php?id=100060329863075">Facebook</a></li>
+                <li><a href="https://wa.me/56963804033">Whatsapp</a></li>
+                <li><a href="https://www.instagram.com/multibaterias_chile/">Instagram</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h4>Servicios</h4>
+            <ul class="services">
+                <!--<li>Delivery de Baterias </li>
+                <li>Cambios de rueda</li>
+                <li>Instalación de baterías</li> -->
+                <li>Venta de Baterias</li>
+                <li>Instalación en local </li>
+                <li>Instalación a domicilio </li>
+                <li>Chequeo de sistema de carga </li>
+                <li>Chequeo de vida útil de batería</li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Multibaterías. Todos los derechos reservados.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

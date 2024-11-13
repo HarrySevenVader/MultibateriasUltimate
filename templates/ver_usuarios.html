@@ -1,0 +1,410 @@
+<!-- LADO DEL CLIENTE - FRONT END -->
+<!-- Programador : Harry, Ingeniero en Informatica, Universidad Tecnologica Metropolitana -->
+
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Usuarios - Multi Baterías⚡</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_confirmation.css') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_admin_page.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('/static/images/place.jpg'); /* Fondo de la página */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* Cambia a 'contain' si quieres que la imagen se ajuste dentro del contenedor */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+        }
+
+        h1 {
+            margin: 0;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* User list section */
+        .user-list {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .user-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .user-table th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .user-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: darkred;
+        }
+
+        /* Footer styles */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            position: relative;
+            bottom: 0;
+        }
+
+        /* Footer sections */
+        .footer-section {
+            margin: 10px 0;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Appointments list styles */
+        .appointments-list {
+            padding: 20px;
+        }
+
+        .appointment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .appointment-table th, .appointment-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .appointment-table th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .appointment-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Secciones con fondo blanco semi-transparente */
+        .user-list, .appointments-list {
+            background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semi-transparente */
+            padding: 20px;
+            border-radius: 10px; /* Bordes redondeados para un mejor efecto */
+            margin: 20px; /* Espacio alrededor de las secciones */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil para dar profundidad */
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+        }
+
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001; /* Asegúrate de que esté por encima de la superposición */
+        }
+
+        .close-btn {
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+<body class="roboto">
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            <h1>Multi Baterías⚡</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index_admin') }}">Inicio</a></li>
+                    <li><a href="{{ url_for('admin_dashboard') }}">Acceder a las Consultas</a></li>
+                    <li><a href="{{ url_for('logout') }}">Cerrar Sesion</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <section id="user-list" class="user-list">
+        <div class="container">
+            <h1>Usuarios Registrados</h1>
+            <table class="user-table">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Correo Electrónico</th>
+                    <th>Rol</th> <!-- Nueva columna para el rol -->
+                    <th>Acciones</th>
+                </tr>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.id_usuario }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email_usuario }}</td>
+                    <td>{{ usuario.rol }}</td> <!-- Mostrar el rol del usuario -->
+                    <td>
+                        <!-- Botón para editar usuario -->
+                        <button type="button" 
+                            data-id="{{ usuario.id_usuario }}" 
+                            data-username="{{ usuario.username }}" 
+                            data-rol="{{ usuario.rol }}" 
+                            onclick="openUserEditModal(this)">Cambiar rol</button>
+                        <form action="{{ url_for('borrar_usuario', user_id=usuario.id_usuario) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas borrar este usuario?');">
+                            <button type="submit">Borrar usuario</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </section>
+
+    <!-- Modal para editar usuario -->
+    <div id="userEditModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <form id="editForm" action="" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas guardar los cambios?');">
+                <input type="hidden" name="usuario_id" id="usuario_id" value="">
+                <label for="username">Nombre de Usuario:</label>
+                <input type="text" name="username" id="username" required readonly> <!-- Campo de solo lectura -->
+                <label for="rol">Rol:</label>
+                <select name="rol" id="rol" required>
+                    <option value="usuario">Usuario</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <button type="submit">Guardar Cambios</button>
+                <button type="button" onclick="closeUserEditModal()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function openUserEditModal(button) {
+        const id = button.getAttribute('data-id');
+        const username = button.getAttribute('data-username');
+        const rol = button.getAttribute('data-rol');
+    
+        // Asignar los valores al formulario
+        document.getElementById('usuario_id').value = id;
+        document.getElementById('username').value = username; // Mostrar el nombre de usuario
+        document.getElementById('rol').value = rol;
+    
+        // Actualizar la acción del formulario para que apunte a la ruta correcta
+        document.getElementById('editForm').action = `/editar_usuario/${id}`;
+    
+        // Mostrar el overlay y el modal
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('userEditModal').style.display = 'block';
+    }
+    </script>
+
+    <!-- Sección de citas agendadas -->
+    <section id="appointments-list" class="appointments-list">
+        <div class="container">
+            <h1>Citas Agendadas</h1>
+            <table class="appointment-table">
+                <tr>
+                    <th>ID de la Cita</th>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Acciones</th>
+                </tr>
+                {% if citas %}
+                    {% for cita in citas %}
+                    <tr>
+                        <td>{{ cita.id_cita }}</td>
+                        <td>{{ cita.nombre_completo_usuario }}</td> <!-- Cambiado aquí para mostrar el nombre completo -->
+                        <td>{{ cita.fecha }}</td>
+                        <td>{{ cita.hora }}</td>
+                        <td>
+                            <form action="{{ url_for('eliminar_cita_admin') }}" method="POST">
+                                <input type="hidden" name="cita_id" value="{{ cita.id_cita }}">
+                                <button type="submit">Borrar cita</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5">No hay citas agendadas de los clientes.</td>
+                    </tr>
+                {% endif %}
+            </table>            
+        </div>
+    </section>
+
+    <!-- Sección de presupuestos -->
+    <section id="appointments-list" class="appointments-list">
+        <div class="container">
+            <h1>Presupuestos de Usuarios</h1>
+            <table class="appointment-table">
+                <tr>
+                    <th>ID del Presupuesto</th>
+                    <th>Nombre</th>
+                    <th>Costo a pagar</th>
+                    <th>Acciones</th>
+                </tr>
+                {% if presupuestos %}
+                    {% for presupuesto in presupuestos %}
+                    <tr>
+                        <td>{{ presupuesto.id_presupuesto }}</td>
+                        <td>
+                            <a href="javascript:void(0);" class="user-name" onclick="openModal({
+                                id_presupuesto: '{{ presupuesto.id_presupuesto }}',
+                                nombre_completo_usuario: '{{ presupuesto.nombre_completo_usuario }}',
+                                costo: '{{ presupuesto.costo }}',
+                                detalle: '{{ presupuesto.detalle }}',
+                                fecha: '{{ presupuesto.fecha }}'
+                            })">
+                                {{ presupuesto.nombre_completo_usuario }}
+                            </a>
+                        </td>
+                        <td>{{ presupuesto.costo }}</td>
+                        <td>
+                            <form action="{{ url_for('eliminar_presupuesto_admin', id_presupuesto=presupuesto.id_presupuesto) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas borrar este presupuesto?');">
+                                <button type="submit">Borrar presupuesto</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4">No hay presupuestos disponibles.</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+    </section>
+
+    <!-- Fondo opaco -->
+    <div class="overlay" id="overlay" style="display: none;"></div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal" style="display: none;">
+        <span class="close-btn" onclick="closeModal()">X</span>
+        <h2>Detalles del Presupuesto</h2>
+        <p><strong>ID:</strong> <span id="modal-id"></span></p>
+        <p><strong>Nombre:</strong> <span id="modal-nombre"></span></p>
+        <p><strong>Monto:</strong> $<span id="modal-monto"></span></p>
+        <p><strong>Detalle:</strong> <span id="modal-detalle"></span></p>
+        <p><strong>Fecha:</strong> <span id="modal-fecha"></span></p>
+    </div>
+
+    <script>function openModal(presupuesto) {
+        document.getElementById("modal-id").textContent = presupuesto.id_presupuesto;
+        document.getElementById("modal-nombre").textContent = presupuesto.nombre_completo_usuario;
+        document.getElementById("modal-monto").textContent = presupuesto.costo;
+        document.getElementById("modal-detalle").textContent = presupuesto.detalle;
+        document.getElementById("modal-fecha").textContent = presupuesto.fecha;
+    
+        document.getElementById("overlay").style.display = "block";
+        document.getElementById("modal").style.display = "block";
+    }
+    
+    function closeModal() {
+        document.getElementById("overlay").style.display = "none";
+        document.getElementById("modal").style.display = "none";
+    }
+    </script>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="container">
+            <div class="footer-section">
+                <h4>Dirección</h4>
+                <p>Tucán 601, Esq, longitudinal Maipú, Santiago de Chile</p>
+            </div>
+            <div class="footer-section">
+                <h4>Redes Sociales</h4>
+                <ul class="social-media">
+                    <li><a href="https://www.facebook.com/profile.php?id=100060329863075">Facebook</a></li>
+                    <li><a href="https://wa.me/56963804033">Whatsapp</a></li>
+                    <li><a href="https://www.instagram.com/multibaterias_chile/">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Servicios</h4>
+                <ul class="services">
+                    <li>Venta de Baterías</li>
+                    <li>Instalación en local</li>
+                    <li>Instalación a domicilio</li>
+                    <li>Chequeo de sistema de carga</li>
+                    <li>Cambio de Baterías</li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Multi Baterías. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

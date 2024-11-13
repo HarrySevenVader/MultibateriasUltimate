@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Armar Presupuesto - Multi Baterías⚡</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .custom-background {
+            width: 100%;
+            min-height: 100vh;
+            background-image: url('/static/images/place.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            display: flex;
+            align-items: center; /* Centrar verticalmente */
+            justify-content: center; /* Centrar horizontalmente */
+        }
+
+        #armar-presupuesto {
+            max-width: 600px;
+            width: 100%; /* Asegurarse de que el formulario se adapte a su contenedor */
+            padding: 20px;
+            background-color: rgba(249, 249, 249, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #armar-presupuesto h2 {
+            text-align: center;
+            font-weight: 500;
+            color: #ff8c00;
+        }
+
+        .presupuesto-intro {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 1em;
+            text-align: center;
+        }
+
+        .form-presupuesto label {
+            display: block;
+            margin-bottom: 0.5em;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-presupuesto select, .form-presupuesto input, .form-presupuesto textarea {
+            width: 100%;
+            padding: 0.8em;
+            margin-bottom: 1em;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 1em;
+            justify-content: space-around;
+        }
+
+        .form-buttons button, .form-buttons a button {
+            padding: 0.8em 1.5em;
+            background-color: #ff8c00;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .form-buttons button:hover, .form-buttons a button:hover {
+            background-color: #ff7000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            <h1>Multi Baterías⚡</h1>
+            <nav>
+                <ul>
+                    <li><a href="#armar-presupuesto">Armar presupuesto</a></li>
+                    <li><a href="{{ url_for('pedir_hora')}}">Pedir hora</a></li>
+                    <li><a href="{{ url_for('index_user') }}">Inicio</a></li>
+                    {% if session.get('username') %}
+                        <li class="user-menu-container">
+                            <a href="#" id="user-menu">{{ session['username'] }}</a>
+                            <ul id="user-dropdown" class="dropdown-content" style="display: none;">
+                                <li><a href="{{ url_for('perfil') }}">Perfil</a></li>
+                                <li><a href="{{ url_for('mis_presupuestos') }}">Mis presupuestos</a></li>
+                                <li><a href="{{ url_for('mis_horas') }}">Horas agendadas</a></li>
+                                <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ url_for('login_oficial') }}">Iniciar Sesión</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="custom-background">
+        <section id="armar-presupuesto">
+            <h2>Armar Presupuesto</h2>
+            <p class="presupuesto-intro">
+                Bienvenido al sistema de presupuestos de Multi Baterías⚡. Aquí podrás calcular el costo estimado de los servicios que ofrecemos, como instalación, mantención, y más. Completa el formulario a continuación para generar tu presupuesto.
+            </p>
+            <form action="{{ url_for('guardar_presupuesto') }}" method="POST" class="form-presupuesto">
+                <input type="hidden" name="id_usuario" value="{{ session['user_id'] }}">
+        
+                <label for="servicio">Servicio:</label>
+                <select id="servicio" name="servicio" required onchange="actualizarCostos()">
+                    <option value="instalacion">Instalación</option>
+                    <option value="mantencion">Mantención</option>
+                    <option value="reparacion">Reparación</option>
+                    <option value="otro">Otro</option>
+                </select>
+        
+                <label for="tipo_vehiculo">Tipo de vehículo:</label>
+                <select id="tipo_vehiculo" name="tipo_vehiculo" required onchange="actualizarCostos()">
+                    <option value="auto">Auto</option>
+                    <option value="moto">Moto</option>
+                    <option value="camion">Camión</option>
+                </select>
+    
+                <label for="marca_producto" id="label_marca_producto">Marca de producto:</label>
+                <select id="marca_producto" name="marca_producto" required onchange="actualizarCostos()">
+                    <option value="ACDelco" data-costo-minimo-producto="50000">ACDelco</option>
+                    <option value="BOSCH" data-costo-minimo-producto="55000">BOSCH</option>
+                    <option value="Rocket" data-costo-minimo-producto="32000">Rocket</option>
+                    <option value="Solite" data-costo-minimo-producto="30000">Solite</option>
+                    <option value="Quick-Starter" data-costo-minimo-producto="40000">Quick Starter</option>
+                    <option value="Voltex" data-costo-minimo-producto="45000">Voltex</option>
+                    <option value="otro" data-costo-minimo-producto="26000">Otro</option>
+                </select>
+    
+                <label for="tipo_servicio">Tipo de servicio:</label>
+                <select id="tipo_servicio" name="tipo_servicio" onchange="actualizarCostos()">
+                    <option value="local">Local</option>
+                    <option value="domicilio">Domicilio</option>
+                </select>
+        
+                <label for="costo_mano_obra">Costo mano de obra:</label>
+                <input type="number" id="costo_mano_obra" name="costo_mano_obra" placeholder="$" required readonly>
+        
+                <label for="costo_producto">Costo mínimo producto:</label>
+                <input type="number" id="costo_producto" name="costo_producto" placeholder="$" required readonly>
+        
+                <label for="costo_total">Costo total:</label>
+                <input type="number" id="costo_total" name="costo_total" placeholder="$" required readonly>
+        
+                <label for="descripcion_adicional">Descripción adicional:</label>
+                <textarea id="descripcion_adicional" name="descripcion_adicional" placeholder="Ingrese detalles adicionales aquí..."></textarea>
+        
+                <div class="form-buttons">
+                    <button type="submit" name="accion" value="guardar">Guardar</button>
+                    <a href="{{ url_for('index_user') }}">
+                        <button type="button" onclick="return confirmarCancelacion()">Descartar</button>
+                    </a>
+                </div>
+            </form>
+        </section>
+    </main>    
+    
+    <script>
+        function actualizarCostos() {
+            const servicio = document.getElementById("servicio").value;
+            const tipoVehiculo = document.getElementById("tipo_vehiculo").value;
+            const tipoServicio = document.getElementById("tipo_servicio").value;
+            const costoManoObra = document.getElementById("costo_mano_obra");
+            const costoProducto = document.getElementById("costo_producto");
+            const costoTotal = document.getElementById("costo_total");
+            const marcaProducto = document.getElementById("marca_producto");
+    
+            // Reiniciar campos
+            costoProducto.value = 0;  
+            costoManoObra.value = 0;  
+    
+            // Definir costos de mano de obra
+            if (servicio === "instalacion") {
+                costoManoObra.value = (tipoVehiculo === "auto") ? 23000 : // Mano de obra para instalación de auto
+                                      (tipoVehiculo === "moto") ? 15000 : 30000; // Mano de obra para instalación de moto o camión
+            } else if (servicio === "mantencion") {
+                costoManoObra.value = (tipoVehiculo === "auto") ? 20000 :
+                                      (tipoVehiculo === "moto") ? 15000 : 30000; // Mano de obra para mantención
+            } else if (servicio === "reparacion") {
+                costoManoObra.value = (tipoVehiculo === "auto") ? 25000 :
+                                      (tipoVehiculo === "moto") ? 20000 : 35000; // Mano de obra para reparación
+            } else if (servicio === "otro") {
+                costoManoObra.value = (tipoVehiculo === "auto") ? 30000 :
+                                      (tipoVehiculo === "moto") ? 25000 : 40000; // Mano de obra para otro
+            }
+    
+            // Actualizar costo del producto basado en la selección de marca
+            if (servicio === "instalacion") {
+                const costoMinimoProducto = marcaProducto.options[marcaProducto.selectedIndex].dataset.costoMinimoProducto;
+                costoProducto.value = costoMinimoProducto; // Establecer el costo mínimo del producto
+            } else {
+                costoProducto.value = 0; // Para otros servicios, el costo mínimo del producto es 0
+            }
+    
+            // Calcular costo total
+            const manoObra = parseInt(costoManoObra.value) || 0;
+            const producto = parseInt(costoProducto.value) || 0;
+            let total = manoObra + producto;
+    
+            // Aplicar incremento del 20% si es domicilio
+            if (tipoServicio === "domicilio") {
+                total *= 1.2; // Incremento del 20%
+            }
+    
+            // Mostrar el costo total
+            costoTotal.value = total; // Solo el valor numérico
+        }
+    
+        // Función para confirmar la cancelación del presupuesto
+        function confirmarCancelacion() {
+            return confirm("¿Estás seguro de que quieres cancelar el presupuesto?");
+        }
+    
+        // Ejecutar actualización de costos al cargar la página
+        window.onload = function() {
+            actualizarCostos();  // Cálculo de costos inicial cuando se carga la página
+        };
+    
+        // Deshabilitar/ocultar campos si se seleccionan ciertos servicios
+        document.getElementById("servicio").addEventListener("change", function() {
+            const servicio = this.value;
+            const marcaProducto = document.getElementById("marca_producto");
+    
+            if (servicio === "mantencion" || servicio === "reparacion" || servicio === "otro") {
+                // Deshabilitar selección de productos y establecer costo a 0
+                marcaProducto.disabled = true;
+                document.getElementById("costo_producto").value = 0; // Costo mínimo producto es 0
+            } else {
+                // Habilitar selección de productos para instalación
+                marcaProducto.disabled = false;
+            }
+    
+            // Actualizar costos en base al servicio seleccionado
+            actualizarCostos();
+        });
+    
+        document.getElementById("marca_producto").addEventListener("change", actualizarCostos);
+        document.getElementById("tipo_vehiculo").addEventListener("change", actualizarCostos);
+        document.getElementById("tipo_servicio").addEventListener("change", actualizarCostos);
+    </script>
+        
+    <!-- Botón Sticky de WhatsApp -->
+    <a href="https://wa.me/56974170208" class="whatsapp-button">
+        <img src="{{ url_for('static', filename='images/logos/whatsapp_logo_icon_186881.webp') }}" alt="WhatsApp">
+    </a>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="container">
+            <div class="footer-section">
+                <h4>Dirección</h4>
+                <p>Tucán 601, Esq, longitudinal Maipu, Santiago de Chile</p>
+            </div>
+            <div class="footer-section">
+                <h4>Redes Sociales</h4>
+                <ul class="social-media">
+                    <li><a href="https://www.facebook.com/profile.php?id=100060329863075">Facebook</a></li>
+                    <li><a href="https://wa.me/56963804033">Whatsapp</a></li>
+                    <li><a href="https://www.instagram.com/multibaterias_chile/">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Servicios</h4>
+                <ul class="services">
+                    <li>Venta de Baterías</li>
+                    <li>Instalación en local</li>
+                    <li>Instalación a domicilio</li>
+                    <li>Chequeo de sistema de carga</li>
+                    <li>Chequeo de vida útil de batería</li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Multi Baterías. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Función para mostrar/ocultar el menú del usuario
+        document.getElementById('user-menu').addEventListener('click', function() {
+            const dropdown = document.getElementById('user-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' || dropdown.style.display === '' ? 'block' : 'none';
+        });
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,11 @@
+/* Fondo del encabezado */
+header {
+    background-color: #1c3a9c; /* Ajusta este valor al color del footer */
+    color: white; /* Para asegurar que el texto sea visible sobre el fondo oscuro */
+}
+
+/* Fondo del pie de página */
+footer {
+    background-color: #1c3a9c; /* Asegura que ambos colores coincidan */
+    color: white; /* También puedes ajustar el color del texto */
+}

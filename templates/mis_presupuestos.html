@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Presupuestos - Multi Baterías⚡</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .custom-background {
+            width: 100%;
+            min-height: 70vh; /* Ajusta la altura mínima del fondo */
+            background-image: url('/static/images/place.jpg');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* Cambia a 'contain' si quieres que la imagen se ajuste dentro del contenedor */
+            display: flex;
+            align-items: center; /* Centrar verticalmente */
+            justify-content: center; /* Centrar horizontalmente */
+        }
+
+        .appointment-box {
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con opacidad */
+            padding: 3em; /* Aumentar el espaciado adicional */
+            border-radius: 10px; /* Bordes redondeados */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Sombra para profundidad */
+            width: 90%; /* Aumentar el ancho según necesites */
+            max-width: 900px; /* Aumentar el ancho máximo para pantallas grandes */
+        }
+
+        .appointment-title {
+            color: #333; /* Color del texto del título */
+            font-size: 2.5em; /* Tamaño del texto del título */
+            margin-bottom: 20px; /* Margen inferior */
+        }
+
+        .appointment-text {
+            color: #555; /* Color del texto */
+            font-size: 1.2em; /* Tamaño del texto */
+            margin-bottom: 1.5em; /* Margen inferior */
+        }
+
+        .presupuesto-table {
+            width: 100%; /* Ancho completo */
+            border-collapse: collapse; /* Colapsar bordes */
+        }
+
+        .presupuesto-table th, .presupuesto-table td {
+            border: 1px solid #ddd; /* Bordes de la tabla */
+            padding: 0.5em; /* Espaciado de celdas */
+            text-align: left; /* Alinear texto a la izquierda */
+            color: #333; /* Color del texto en celdas */
+        }
+
+        .presupuesto-table th {
+            background-color: #333; /* Fondo del encabezado */
+            color: white; /* Color del texto del encabezado */
+        }
+
+        .presupuesto-table tr:nth-child(even) {
+            background-color: #f2f2f2; /* Fondo de filas pares */
+        }
+
+        .presupuesto-table tr:hover {
+            background-color: #ddd; /* Fondo de filas al pasar el mouse */
+        }
+
+        .button-container {
+            display: flex; /* Usar flexbox para alinear los botones */
+            gap: 10px; /* Espacio entre los botones */
+            justify-content: flex-start; /* Alineación a la izquierda */
+        }
+
+        .delete-button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: #ff3333;
+        }
+        .pdf-button {
+            background-color: #4CAF50; /* Color verde */
+            color: white; /* Texto blanco */
+            border: none; /* Sin borde */
+            padding: 0.5em 1em; /* Espaciado */
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer; /* Cursor tipo puntero */
+            text-decoration: none; /* Sin subrayado */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+
+        .pdf-button:hover {
+            background-color: #45a049; /* Color más oscuro al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            <h1>Multi Baterías⚡</h1>
+            
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('pedir_presupuesto')}}">Armar presupuesto</a></li>
+                    <li><a href="{{ url_for('pedir_hora')}}">Pedir hora</a></li>
+                    <li><a href="{{ url_for('index_user') }}">Inicio</a></li>
+                    {% if session.get('username') %}
+                        <li class="user-menu-container">
+                            <a href="#" id="user-menu">{{ session['username'] }}</a>
+                            <ul id="user-dropdown" class="dropdown-content" style="display: none;">
+                                <li><a href="{{ url_for('perfil') }}">Perfil</a></li>
+                                <li><a href="{{ url_for('mis_presupuestos') }}">Mis presupuestos</a></li>
+                                <li><a href="{{ url_for('mis_horas') }}">Horas agendadas</a></li>
+                                <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ url_for('login_oficial') }}">Iniciar Sesión</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Script para desplegar el menú del usuario -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var userMenu = document.getElementById('user-menu');
+            var dropdown = document.getElementById('user-dropdown');
+            
+            if (userMenu) {
+                userMenu.addEventListener('click', function(event) {
+                    event.preventDefault();  
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
+            }
+
+            window.addEventListener('click', function(event) {
+                if (!userMenu.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <section class="custom-background">
+        <div class="appointment-box"> 
+            <h2 class="appointment-title">Mis Presupuestos</h2>
+            <p class="appointment-text">Estimado <strong>{{ session['username'] }}⚡</strong>, aquí están los presupuestos generados:</p>
+            
+            {% if presupuestos %}
+            <table class="presupuesto-table">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Código del presupuesto</th>
+                        <th>Detalle</th> <!-- Nueva columna para el detalle -->
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for presupuesto in presupuestos %}
+                    <tr class="presupuesto-row">
+                        <td>{{ presupuesto.fecha.strftime('%d/%m/%Y') }}</td>
+                        <td>#{{ presupuesto.codigo_presupuesto }}</td>  <!-- Asegúrate de que sea el campo correcto -->
+                        <td>{{ presupuesto.detalle or 'No disponible' }}</td> <!-- Mostrar el detalle -->
+                        <td class="button-container">
+                            <a href="{{ url_for('eliminar_presupuesto', id_presupuesto=presupuesto.id_presupuesto) }}" class="delete-button">Eliminar</a>
+                            <a href="{{ url_for('descargar_pdf', id_presupuesto=presupuesto.id_presupuesto) }}" class="pdf-button">Descargar PDF</a>
+                        </td>                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>                    
+            {% else %}
+                <p>No has creado presupuestos aún.</p>
+            {% endif %}
+        </div>
+    </section>
+
+
+    <!-- Botón Sticky de WhatsApp -->
+    <a href="https://wa.me/56974170208" class="whatsapp-button">
+        <img src="{{ url_for('static', filename='images/logos/whatsapp_logo_icon_186881.webp') }}" alt="WhatsApp">
+    </a>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="container">
+            <div class="footer-section">
+                <h4>Dirección</h4>
+                <p>Tucán 601, Esq, longitudinal Maipu, Santiago de Chile</p>
+            </div>
+            <div class="footer-section">
+                <h4>Redes Sociales</h4>
+                <ul class="social-media">
+                    <li><a href="https://www.facebook.com/profile.php?id=100060329863075">Facebook</a></li>
+                    <li><a href="https://wa.me/56963804033">Whatsapp</a></li>
+                    <li><a href="https://www.instagram.com/multibaterias_chile/">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Servicios</h4>
+                <ul class="services">
+                    <li>Venta de Baterías</li>
+                    <li>Instalación en local</li>
+                    <li>Instalación a domicilio</li>
+                    <li>Chequeo de sistema de carga</li>
+                    <li>Chequeo de vida útil de batería</li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Multibaterías. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

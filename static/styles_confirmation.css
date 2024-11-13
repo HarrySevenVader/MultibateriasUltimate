@@ -1,0 +1,83 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.form-register {
+    background-color: #eaeaea; /* Fondo gris claro */
+    max-width: 500px; /* Reducir el ancho del formulario */
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Para el efecto de rayo en el título */
+    left: -40px; /* Mover el formulario hacia la izquierda */
+}
+
+.form-register h2 {
+    text-align: center;
+    color: #007BFF; /* Tono azul para el título */
+    margin-bottom: 20px;
+    position: relative; /* Necesario para el efecto de rayo */
+}
+
+.form-register h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -5px;
+    width: 50%;
+    height: 5px;
+    background-color: #28a745; /* Color verde para el "rayo" */
+    transform: translateX(-50%);
+    border-radius: 5px;
+}
+
+.form-register label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px; /* Tamaño de letra reducido */
+}
+
+.form-register input[type="text"],
+.form-register input[type="email"],
+.form-register select,
+.form-register textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px; /* Tamaño de letra reducido */
+}
+
+.form-register input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #007BFF; /* Botón azul */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px; /* Mantener el tamaño del botón */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.form-register input[type="submit"]:hover {
+    background-color: #0056b3; /* Cambio de color al pasar el ratón */
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .form-register {
+        padding: 15px;
+    }
+
+    .form-register h2 {
+        font-size: 24px; /* Mantener tamaño del título en pantallas pequeñas */
+    }
+}

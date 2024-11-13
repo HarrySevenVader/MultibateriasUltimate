@@ -1,0 +1,141 @@
+/* user.css */
+
+/* Aumentar el tamaño de los botones */
+.button-container-custom button {
+    font-size: 20px; /* Aumentar el tamaño del texto */
+    padding: 15px 30px; /* Aumentar el padding */
+    margin: 10px; /* Añadir margen para separación */
+}
+
+/* Estilos específicos para cada botón */
+.btn-left {
+    background-color: red; /* Color de fondo rojo */
+    color: white; /* Color del texto blanco */
+}
+
+.btn-right {
+    background-color: blue; /* Color de fondo azul */
+    color: white; /* Color del texto blanco */
+}
+
+/* Centrar los botones dentro del contenedor */
+.button-container-custom {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    background-color: white; /* Fondo blanco */
+    padding: 20px; /* Padding para el contenedor */
+    border-radius: 10px; /* Bordes redondeados */
+}
+
+/* General styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Encabezado */
+header {
+    background-color: #2d2d2d;
+    color: #fff;
+    padding: 20px 0;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav ul {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Hero Section */
+.hero {
+    background: url('/static/images/hero-background.jpg') no-repeat center center/cover;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.hero-content {
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+/* Appointment */
+.appointment-container {
+    padding: 40px 0;
+    background-color: #fff;
+    margin: 20px 0;
+}
+
+.appointment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Footer */
+footer {
+    background-color: #2d2d2d;
+    color: #fff;
+    padding: 40px 0;
+    text-align: center;
+}
+
+footer .footer-section {
+    margin-bottom: 20px;
+}
+
+footer .social-media, footer .services {
+    list-style: none;
+    padding: 0;
+}
+
+footer .social-media li, footer .services li {
+    margin-bottom: 10px;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}

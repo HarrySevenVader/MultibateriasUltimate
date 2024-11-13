@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - Multi Baterías⚡</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-pagina.ico') }}">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="container">
+            <h1>Multi Baterías⚡</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('pedir_presupuesto')}}">Armar presupuesto</a></li>
+                    <li><a href="{{ url_for('pedir_hora')}}">Pedir hora</a></li>
+                    <li><a href="{{ url_for('index_user')}}">Inicio</a></li>
+                    {% if session.get('username') %}
+                        <li class="user-menu-container">
+                            <a href="#" id="user-menu">{{ session['username'] }}</a>
+                            <ul id="user-dropdown" class="dropdown-content" style="display: none;">
+                                <li><a href="{{ url_for('perfil') }}">Perfil</a></li>
+                                <li><a href="{{ url_for('mis_presupuestos') }}">Mis presupuestos</a></li>
+                                <li><a href="{{ url_for('mis_horas') }}">Horas agendadas</a></li>
+                                <li><a href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li><a href="{{ url_for('login_oficial') }}">Iniciar Sesión</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Script para desplegar el menú del usuario -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var userMenu = document.getElementById('user-menu');
+            var dropdown = document.getElementById('user-dropdown');
+            
+            if (userMenu) {
+                userMenu.addEventListener('click', function(event) {
+                    event.preventDefault();  
+                    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+                });
+            }
+    
+            window.addEventListener('click', function(event) {
+                if (!userMenu.contains(event.target) && !dropdown.contains(event.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+    <!-- Contenido del perfil -->
+    <section class="user-profile-section">
+        <div class="profile-card">
+            <div class="profile-image">
+                <img src="{{ url_for('static', filename='images/perfil/Perfil.png') }}" alt="Foto de Perfil">
+            </div>
+            <div class="profile-details">
+                <h2><span>{{ user.username }}</span></h2>
+                <p><strong><span>{{ user.nombre_completo_usuario }}</span></strong></p>
+                <p><strong><span>{{ user.email_usuario }}</span></strong></p>
+            </div>
+
+            <!-- Sección de Configuración -->
+            <section id="settings" class="settings">
+                <h2>Configuración de Perfil</h2>
+                <p>Puedes editar los datos de tu perfil aqui.</p>
+                <br>
+                <form action="{{ url_for('update_profile') }}" method="POST">
+                    <div class="form-group">
+                        <label for="name">Nombre Completo:</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ user.nombre_completo_usuario }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo Electronico:</label>
+                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email_usuario }}" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar Información</button>
+                </form>
+            </section>
+        </div>
+    </section>
+
+    <!-- Botón Sticky de WhatsApp -->
+    <a href="https://wa.me/56974170208" class="whatsapp-button">
+        <img src="{{ url_for('static', filename='images/logos/whatsapp_logo_icon_186881.webp') }}" alt="WhatsApp">
+    </a>
+
+    <!-- Pie de página -->
+    <footer>
+        <div class="container">
+            <div class="footer-section">
+                <h4>Dirección</h4>
+                <p>Tucán 601, Esq, longitudinal Maipu, Santiago de Chile</p>
+            </div>
+            <div class="footer-section">
+                <h4>Redes Sociales</h4>
+                <ul class="social-media">
+                    <li><a href="https://www.facebook.com/profile.php?id=100060329863075">Facebook</a></li>
+                    <li><a href="https://wa.me/56963804033">Whatsapp</a></li>
+                    <li><a href="https://www.instagram.com/multibaterias_chile/">Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Servicios</h4>
+                <ul class="services">
+                    <li>Venta de Baterías</li>
+                    <li>Instalación de Baterías</li>
+                    <li>Mantenimiento de Baterías</li>
+                </ul>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Multi Baterías. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<style>
+    /* Estilos generales */
+    body {
+        background: url('/static/images/place.jpg') no-repeat center center; /* Cambia la ruta aquí */
+        background-size: cover; /* Ajusta el tamaño del fondo */
+        font-family: 'Roboto', sans-serif; /* Aplica la fuente Roboto al cuerpo de la página */
+        font-weight: 400; /* Peso normal */
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        background-color: #f4f4f4; /* Color de fondo por defecto */
+        min-height: 100vh; /* Asegura que el body ocupe al menos toda la altura de la ventana */
+        display: flex; /* Utiliza flexbox para una mejor alineación de elementos */
+        flex-direction: column; /* Para alinear el footer al final */
+    }
+
+    /* Sección del perfil de usuario */
+    .user-profile-section {
+        display: flex; /* Usa flexbox para centrar el contenido */
+        justify-content: center; /* Centra horizontalmente */
+        align-items: center; /* Centra verticalmente */
+        padding: 20px; /* Espaciado alrededor */
+        flex: 1; /* Permite que esta sección ocupe el espacio disponible */
+    }
+
+    /* Contenedor principal para centrar el contenido */
+    .container {
+        margin: 0; /* Eliminar márgenes */
+        padding: 20px; /* O el padding que necesites */
+        width: 100%; /* Asegúrate de que ocupe el ancho completo */
+    }
+
+    /* Tarjeta del perfil */
+    .profile-card {
+        background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+        border-radius: 10px; /* Esquinas redondeadas */
+        padding: 60px; /* Aumentar el espaciado interno */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para destacar */
+        max-width: 600px; /* Aumentar el ancho máximo de la tarjeta */
+        text-align: center; /* Centrar texto */
+        min-height: 400px; /* Establecer una altura mínima para la tarjeta */
+    }
+
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Imagen del perfil */
+    .profile-image img {
+        width: 150px; /* Ajusta el tamaño de la imagen */
+        height: 150px; /* Mantiene la proporción de la imagen */
+        border-radius: 50%; /* Redondea la imagen para hacerla circular */
+        object-fit: cover; /* Ajusta la imagen para que cubra el área sin distorsionarse */
+    }
+
+    /* Detalles del perfil */
+    .profile-details h2 {
+        margin: 20px 0 10px; /* Espaciado alrededor */
+        font-size: 32px; /* Aumentar tamaño del texto */
+        font-weight: 500;
+        color: #333;
+        text-align: center;
+    }
+
+    .profile-details p {
+        margin: 10px 0; /* Espaciado alrededor */
+        font-size: 18px; /* Aumentar tamaño del texto */
+        color: #555;
+    }
+
+    /* Estilo del formulario */
+    .settings {
+        margin-top: 30px; /* Espacio arriba del formulario */
+    }
+
+    .settings form {
+        display: flex;
+        flex-direction: column; /* Coloca los elementos en columna */
+    }
+
+    .form-group {
+        margin-bottom: 15px; /* Espacio debajo de cada grupo de formulario */
+    }
+
+    .form-group label {
+        font-weight: 500; /* Establece el peso de la fuente */
+    }
+
+    .form-control {
+        padding: 10px; /* Espaciado interno del input */
+        border: 1px solid #ccc; /* Borde del input */
+        border-radius: 5px; /* Esquinas redondeadas */
+    }
+
+    .btn-primary {
+        background-color: #4CAF50; /* Color del botón */
+        color: white; /* Color del texto */
+        border: none; /* Sin borde */
+        padding: 10px 20px; /* Espaciado interno */
+        border-radius: 5px; /* Esquinas redondeadas */
+        cursor: pointer; /* Cambia el cursor al pasar por encima */
+        transition: background-color 0.3s; /* Transición suave */
+    }
+
+    .btn-primary:hover {
+        background-color: #45a049; /* Cambia el color al pasar el mouse */
+    }
+
+    /* Botón Sticky de WhatsApp */
+    .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            z-index: 100;
+        }
+
+        .whatsapp-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* Estilos del pie de página */
+    footer {
+        background-color: #333; /* Color de fondo */
+        color: white; /* Color del texto */
+        padding: 20px; /* Espaciado */
+        text-align: center; /* Centrar texto */
+    }
+
+    .footer-section {
+        margin-bottom: 15px; /* Espacio debajo de cada sección */
+    }
+
+    .social-media, .services {
+        list-style-type: none; /* Elimina viñetas */
+        padding: 0; /* Elimina padding */
+    }
+
+    .social-media li, .services li {
+        margin: 5px 0; /* Espacio entre elementos */
+    }
+
+    .footer-bottom {
+        margin-top: 20px; /* Espacio encima del pie de página */
+    }
+</style>
