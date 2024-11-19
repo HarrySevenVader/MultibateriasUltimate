@@ -10,6 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import smtplib
 import re #Esta libreria es para validar el correo 
 from email.mime.text import MIMEText
+import twilio
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from twilio.twiml.messaging_response import MessagingResponse
 from twilio.rest import Client
